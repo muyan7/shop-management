@@ -30,7 +30,9 @@
         </el-form-item>
         <!-- 提交与取消 -->
         <el-form-item class="btns">
-          <el-button type="primary" @click="loginUser" class="loginIn">登录</el-button>
+          <el-button type="primary" @click="loginUser" class="loginIn"
+            >登录</el-button
+          >
           <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -39,7 +41,7 @@
 </template>
 
 <script>
-import {throttle} from "lodash";
+import { throttle } from "lodash";
 export default {
   name: "Login",
   data() {
@@ -83,15 +85,14 @@ export default {
         const { data: res } = await this.$axios.post("login", this.loginForm);
         if (res.meta.status === 200) {
           this.$message.success("Login successed");
-        window.sessionStorage.setItem('token',res.data.token)
-        this.$router.push('/home')
+          window.sessionStorage.setItem("token", res.data.token);
+          this.$router.push("/home");
         } else {
           return this.$message.error("Login failed");
         }
       });
     }, 1000),
   },
-  
 };
 </script>
 
@@ -105,9 +106,8 @@ export default {
   .login_center {
     width: 550px;
     height: 350px;
-    background-color: rgb(195, 249, 134);
-    border: 5px solid rgb(255, 0, 0);
-    border-radius: 20px;
+    box-shadow: 0 0 2000px rgb(235, 250, 17), 0 0 200px rgb(215, 250, 173) inset;
+    border-radius: 30px;
     position: absolute;
     .login_avator {
       width: 140px;
@@ -130,7 +130,7 @@ export default {
         display: flex;
         width: 100%;
         justify-content: center;
-        .loginIn{
+        .loginIn {
           margin-right: 40px;
         }
       }
