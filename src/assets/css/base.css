@@ -35,3 +35,7 @@ img {
 .el-pagination{
   margin-top: 15px;
 }
+.flexdec{
+  display: flex;
+  align-items: center;
+}

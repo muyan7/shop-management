@@ -84,6 +84,7 @@
                 size="small"
                 icon="el-icon-star-off"
                 circle
+                @click="allotRights(scoped.row)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -106,7 +107,7 @@
           <el-form-item label="用户名" prop="username">
             <el-input v-model="addFormInfo.username"></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="password" >
+          <el-form-item label="密码" prop="password">
             <el-input v-model="addFormInfo.password" show-password></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
@@ -148,6 +149,30 @@
         <span slot="footer" class="dialog-footer">
           <el-button @click="editDialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="editUserInfo">确 定</el-button>
+        </span>
+      </el-dialog>
+      <!-- 分配权限 -->
+      <el-dialog title="提示" :visible.sync="RightDialogVisible" width="40%" @close="setDialogClose">
+        <div>
+          <p>当前的用户：{{ rightInfo.username }}</p>
+          <p>当前的角色：{{ rightInfo.role_name }}</p>
+          <p>
+            分配新角色：
+            <el-select v-model="rightValueId" placeholder="请选择角色">
+              <el-option
+                v-for="item in rolesList"
+                :key="item.id"
+                :label="item.roleName"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </p>
+        </div>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="RightDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="sendRightsRoles">确 定</el-button>
         </span>
       </el-dialog>
       <!-- 分页区 -->
@@ -254,6 +279,14 @@ export default {
           },
         ],
       },
+      // 权限框
+      RightDialogVisible: false,
+      // 权限框内用户信息
+      rightInfo: {},
+      // 权限框内的角色列表
+      rolesList: [],
+      // 更改角色的id
+      rightValueId: "",
     };
   },
   created() {
@@ -351,7 +384,6 @@ export default {
         .then(() => {
           this.$axios.delete(`users/${id}`).then((res) => {
             this.getUserList();
-          return this.data.meta.msg
           });
           return this.$message({
             type: "success",
@@ -365,6 +397,33 @@ export default {
           })
         );
     },
+    // 分配角色权限
+    async allotRights(row) {
+      this.rightInfo = row;
+      // 获取角色列表
+      const { data: res } = await this.$axios.get("roles");
+      if (res.meta.status !== 200)
+        return this.$message.error("获取角色列表失败！");
+      this.rolesList = res.data;
+      this.RightDialogVisible = true;
+    },
+    // 更改角色
+    async sendRightsRoles() {
+      if (!this.rightValueId) return this.$message.error("请选择要分配的角色");
+      const { data: res } = await this.$axios.put(
+        `users/${this.rightInfo.id}/role`,
+        { rid: this.rightValueId }
+      );
+      if (res.meta.status !== 200) return this.$message.error("分配角色失败！");
+      this.$message.success(res.meta.msg);
+      this.getUserList();
+      this.RightDialogVisible = false;
+    },
+    // 权限管理框的关闭事件
+    setDialogClose(){
+      this.rightInfo={}
+      this.rightValueId = "";
+    }
   },
 };
 </script>
