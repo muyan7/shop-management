@@ -232,9 +232,9 @@ export default {
     // 封装请求动态与静态参数的函数。
     async getParamsThirdList() {
       if (this.selectParamsKeys.length !== 3) {
-        this.activeParamsList=[]
-        this.selectParamsKeys = []
-        return
+        this.activeParamsList = [];
+        this.selectParamsKeys = [];
+        return;
       }
       const { data: res } = await this.$axios({
         url: `categories/${this.paramsId}/attributes`,
@@ -249,7 +249,7 @@ export default {
         this.$set(item, "inputValue", "");
       });
       this.activeParamsList = res.data;
-      console.log(this.activeParamsList);
+      console.log(this.activeParamsList[0].attr_vals);
       this.getParamsList();
     },
     // 修改功能的弹窗
