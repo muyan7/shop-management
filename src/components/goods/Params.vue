@@ -51,7 +51,12 @@
         </el-tabs>
       </el-row>
       <!-- 表格区 -->
-      <el-table :data="activeParamsList" style="width: 100%" border="">
+      <el-table
+        :data="activeParamsList"
+        style="width: 100%"
+        border=""
+        ref="updataTable"
+      >
         <!-- 展开行 -->
         <el-table-column type="expand">
           <template v-slot="scoped">
@@ -85,7 +90,7 @@
           </template>
         </el-table-column>
         <!-- 索引列 -->
-        <el-table-column type="index" label="#" width="90"> </el-table-column>
+        <el-table-column type="index" label="#" width="90px"> </el-table-column>
         <el-table-column
           prop="attr_name"
           :label="activeName === 'many' ? '参数名称' : '属性名称'"
@@ -249,7 +254,6 @@ export default {
         this.$set(item, "inputValue", "");
       });
       this.activeParamsList = res.data;
-      console.log(this.activeParamsList[0].attr_vals);
       this.getParamsList();
     },
     // 修改功能的弹窗
@@ -383,6 +387,12 @@ export default {
     titleDialog() {
       return this.activeName === "many" ? "动态参数" : "静态属性";
     },
+  },
+  beforeUpdate() {
+    this.$nextTick(() => {
+      // 在数据加载完，重新渲染表格
+      this.$refs.updataTable.doLayout();
+    });
   },
 };
 </script>

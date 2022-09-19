@@ -14,7 +14,7 @@
         </el-col>
       </el-row>
       <!-- 表格区 -->
-      <el-table :data="rolesList">
+        <el-table :data="rolesList">
         <el-table-column type="expand" width="120px">
           <template v-slot="{ row }">
             <el-row
@@ -97,7 +97,7 @@
         @close="addRolesInfoClose"
       >
         <el-form
-          label-width="80px"
+          label-width="auto"
           :model="addRolesInfo"
           :rules="addRolesrules"
           ref="addRolesRef"
