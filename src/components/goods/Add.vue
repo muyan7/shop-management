@@ -131,7 +131,6 @@
 </template>
 
 <script>
-import _ from "lodash";
 export default {
   name: "Add",
   data() {
@@ -240,9 +239,9 @@ export default {
           item.attr_vals =
             item.attr_vals.length === 0 ? [] : item.attr_vals.split(" ");
         });
-        console.log(res.data);
+        // console.log(res.data);
         this.manyTableData = res.data;
-        console.log(this.manyTableData, "动态参数");
+        // console.log(this.manyTableData, "动态参数");
         this.$message.success(res.meta.msg);
       } else if (Anode.index === "2" && this.addForm.goods_cat.length === 3) {
         const { data: res } = await this.$axios(
@@ -256,7 +255,7 @@ export default {
         if (res.meta.status !== 200)
           return this.$message.error("获取静态参数失败");
         this.onlyTableData = res.data;
-        console.log(this.onlyTableData, "静态参数");
+        // console.log(this.onlyTableData, "静态参数");
       }
     },
     // 处理图片预览
@@ -284,7 +283,7 @@ export default {
       this.$refs.addFormRef.validate( async (valid) => {
         if (!valid) this.$message.error("请填写必要的表单项！");
         // 因为三级菜单列表cascader必须是数组，但是表单提交goods_cat时又需要是字符串，所以这里直接修改成字符串就会出现报错，则需要借助深拷贝来实现。
-        const newAddForm = _.cloneDeep(this.addForm);
+        const newAddForm =this._.cloneDeep(this.addForm);
         newAddForm.goods_cat = newAddForm.goods_cat.join(",");
         // 处理动态参数
         this.manyTableData.forEach((item) => {
@@ -303,7 +302,7 @@ export default {
           this.addForm.attrs.push(onlyInfo);
         });
         newAddForm.attrs = this.addForm.attrs;
-        console.log(newAddForm);
+        // console.log(newAddForm);
         // 发起请求添加商品
         // 商品名称必须是唯一的
       const {data:res} = await  this.$axios.post('goods',newAddForm)
